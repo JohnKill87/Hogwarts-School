@@ -22,7 +22,7 @@ public class StudentController {
         return studentService.addStudent(student);
     }
 
-    @GetMapping
+    @GetMapping("/by-id")
     public Student getStudent(@RequestParam Long id) {
         return studentService.findStudent(id);
     }

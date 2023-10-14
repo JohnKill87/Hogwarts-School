@@ -23,7 +23,7 @@ public class FacultyController {
         return facultyService.addFaculty(faculty);
     }
 
-    @GetMapping
+    @GetMapping("/by-id")
     public Faculty getFaculty(@RequestParam Long id) {
         return facultyService.getFaculty(id);
     }
@@ -43,7 +43,7 @@ public class FacultyController {
         return facultyService.getFacultyByColor(color);
     }
 
-    @GetMapping("by-or-color")
+    @GetMapping("/by-name-or-color")
     public Set<Faculty> getByColorOrNameIgnoreCase(@RequestParam String param) {
         return facultyService.getFacultyByColorOrName(param);
     }
