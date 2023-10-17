@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/avatar")
@@ -40,5 +41,10 @@ public class AvatarController {
     @GetMapping(value = "/student/{id}/avatar-from-file")
     public void downloadAvatar (@PathVariable Long id, HttpServletResponse response) throws IOException{
         avatarService.downloadAvatarFromFileSystem(id, response);
+    }
+
+    @GetMapping
+    public List<Avatar> getAllAvatars(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+        return avatarService.getAllAvatars(pageNumber,pageSize);
     }
 }
