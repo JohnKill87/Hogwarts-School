@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +32,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class AvatarService {
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
@@ -42,6 +45,7 @@ public class AvatarService {
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        logger.debug("Upload avatar");
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -61,12 +65,17 @@ public class AvatarService {
         avatar.setMediaType(avatarFile.getContentType());
         avatar.setData(avatarFile.getBytes());
         avatarRepository.save(avatar);
+        logger.debug("Avatar uploaded");
     }
     private String getExtensions(String fileName) {
+        logger.debug("Getting extensions");
+        logger.debug("Extensions received");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     public ResponseEntity<byte[]> downloadAvatarByStudentFromDb(Long studentId) {
+
+        logger.debug("Downloading avatar by student from db");
 
         Optional<Avatar> avatarOpt = avatarRepository.findByStudentId(studentId);
 
@@ -79,10 +88,13 @@ public class AvatarService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
         headers.setContentLength(avatar.getData().length);
+        logger.debug("Avatar by student from db loaded");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getData());
     }
 
     public void downloadAvatarFromFileSystem(Long studentId, HttpServletResponse response) throws IOException {
+
+        logger.debug("Downloading avatar from file system");
 
         Optional<Avatar> avatarOpt = avatarRepository.findByStudentId(studentId);
 
@@ -100,10 +112,13 @@ public class AvatarService {
             response.setContentLength((int) avatar.getFileSize());
             is.transferTo(os);
         }
+        logger.debug("Avatar from file system loaded");
     }
 
     public List<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+        logger.debug("Getting all avatars");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        logger.debug("All avatars received");
         return avatarRepository.findAll(pageRequest).getContent();
     }
 }
