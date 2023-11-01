@@ -8,6 +8,8 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/student")
@@ -68,5 +70,29 @@ public class StudentController {
     @GetMapping("/last-Students")
     public List<StudentByCategory> getLastStudents() {
         return studentService.getLastStudents();
+    }
+
+    @GetMapping("/students-Starting-From-A")
+    public List<String> getStudentsStartingFromA() {
+        return studentService.getStudentsStartingFromA();
+    }
+
+    @GetMapping("/student-Average-Age-With-Stream")
+    public Double getStudentAverageAgeWithStream() {
+        return studentService.getStudentAverageAgeWithStream();
+    }
+
+    @GetMapping("/fast-Integer-Value")
+    public Integer getFastIntegerValue() {
+        int sum;
+        List<Integer> listOfInt = Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .collect(Collectors.toList());
+        sum = listOfInt.stream()
+                .parallel()
+                .mapToInt(a -> a)
+                .sum();
+        return sum;
+//        Результат: 237 ms
     }
 }

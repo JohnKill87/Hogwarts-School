@@ -8,6 +8,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,4 +71,12 @@ public class FacultyService {
         logger.debug("Students by faculty id found");
         return studentService.getByFacultyId(id);
     }
+
+    public String getLongNameOfTheFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .toString();
+    }
+//     .max(Comparator.comparingInt(String::length))
 }

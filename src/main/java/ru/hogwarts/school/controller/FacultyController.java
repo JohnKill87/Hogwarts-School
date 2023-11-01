@@ -52,4 +52,9 @@ public class FacultyController {
     public Collection<Student> getStudentsByFacultyId(@RequestParam Long id) {
         return facultyService.getStudentsByFacultyId(id);
     }
+
+    @GetMapping("/long-Name-Of-The-Faculty")
+    public String getLongNameOfTheFaculty() {
+        return facultyService.getLongNameOfTheFaculty();
+    }
 }

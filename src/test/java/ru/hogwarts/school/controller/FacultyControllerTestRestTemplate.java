@@ -8,6 +8,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
@@ -87,6 +88,14 @@ public class FacultyControllerTestRestTemplate {
 
         Assertions
                 .assertThat(this.testRestTemplate.postForObject("http://localhost:" + port + "/faculty", faculty, String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetLongNameOfTheFaculty() {
+        Assertions
+                .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/faculty" + "/long-Name-Of-The-Faculty",
+                        String.class))
                 .isNotNull();
     }
 }

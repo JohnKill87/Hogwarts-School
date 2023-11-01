@@ -8,7 +8,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.hogwarts.school.model.Student;
+
+import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StudentControllerTestRestTemplate {
@@ -95,6 +98,30 @@ public class StudentControllerTestRestTemplate {
     public void testGetLastStudents() throws Exception {
         Assertions
                 .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student" + "/last-Students", String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetStudentsStartingFromA() {
+        Assertions
+                .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student" + "/students-Starting-From-A",
+                        String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetStudentAverageAgeWithStream() {
+        Assertions
+                .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student" + "/student-Average-Age-With-Stream",
+                        String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetFastIntegerValue() {
+        Assertions
+                .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student" + "/fast-Integer-Value",
+                        String.class))
                 .isNotNull();
     }
 }
