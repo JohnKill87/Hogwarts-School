@@ -19,6 +19,8 @@ public class StudentService {
 
     Logger logger = LoggerFactory.getLogger(StudentService.class);
 
+    private volatile Integer count = 0;
+
     private final StudentRepository studentRepository;
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -109,5 +111,44 @@ public class StudentService {
                 .mapToDouble(Student::getAge)
                 .average()
                 .orElse(Double.NaN);
+    }
+
+    public void getAllStudentsWithThread() {
+        List<Student> studentList = studentRepository.findAll();
+
+        System.out.println(studentList.get(0).getName());
+        System.out.println(studentList.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(studentList.get(2).getName());
+            System.out.println(studentList.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(studentList.get(4).getName());
+            System.out.println(studentList.get(5).getName());
+        }).start();
+    }
+
+    private synchronized void synchronizedStudentName(List<Student> studentList) {
+        System.out.println(studentList.get(count).getName());
+        count++;
+    }
+
+    public void getAllStudentsWithSynchronizedThread() {
+        List<Student> studentList = studentRepository.findAll();
+
+        synchronizedStudentName(studentList);
+        synchronizedStudentName(studentList);
+
+        new Thread(() -> {
+            synchronizedStudentName(studentList);
+            synchronizedStudentName(studentList);
+        }).start();
+
+        new Thread(() -> {
+            synchronizedStudentName(studentList);
+            synchronizedStudentName(studentList);
+        }).start();
     }
 }

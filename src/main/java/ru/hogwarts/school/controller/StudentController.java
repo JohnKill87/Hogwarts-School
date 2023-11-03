@@ -95,4 +95,14 @@ public class StudentController {
         return sum;
 //        Результат: 237 ms
     }
+
+    @GetMapping("/all-Students-With-Thread")
+    public void getAllStudentsWithThread() {
+        studentService.getAllStudentsWithThread();
+    }
+
+    @GetMapping("/all-Students-With-Synchronized-Thread")
+    public void getAllStudentsWithSynchronizedThread() {
+        studentService.getAllStudentsWithSynchronizedThread();
+    }
 }
